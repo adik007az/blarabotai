@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОТКРЫТКА ОТ АДИКА</title>
+    <!-- Подключаем красивый рукописный шрифт с поддержкой кириллицы -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            overflow: hidden; /* Скрыть прокрутку */
+            background-color: #e071a5; /* Фон страницы */
+            position: relative;
+            height: 100vh; /* Высота страницы */
+            margin: 0;
+            display: flex; /* Flexbox для центрирования содержимого */
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Анимация падающих цветов (ЗАДНИЙ ПЛАН) */
+        .falling-image {
+            position: absolute;
+            width: 50px; /* Ширина падающих элементов */
+            animation: fall linear infinite;
+            z-index: -1; /* Отправляем на самый задний план, под контент */
+            pointer-events: none; /* Чтобы мышка не цепляла падающие картинки */
+        }
+
+        @keyframes fall {
+            0% { top: -100px; transform: rotate(0deg); }
+            100% { top: 100vh; transform: rotate(360deg); }
+        }
+
+        /* Контейнер для контента (ПЕРЕДНИЙ ПЛАН) */
+        .page-content {
+            position: relative;
+            z-index: 2; /* Поднимаем поверх падающего фона */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 400px; /* Ограничиваем общую ширину под размер рамки */
+            max-height: 600px;
+        }
+
+        /* Настройки фонового изображения открытки */
+        .central-image {
+            width: 100%;
+            height: auto;
+            max-height: 90vh; /* Чтобы открытка не вылезала за границы экрана по высоте */
+            border: 5px solid white; /* Белая рамка */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: block;
+        }
+
+        /* Блок с текстом, накладываемый ПОВЕРХ картинки */
+        .card-text {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65%; /* Ограничиваем ширину текста */
+            text-align: center;
+            
+            /* Стилизация шрифта */
+            font-family: 'Marck Script', cursive;
+            color: #7A3E5D; /* Глубокий оттенок темно-розового/бордового */
+            font-size: 24px;
+            line-height: 1.3;
+            text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.8);
+            user-select: none;
+        }
+
+        /* Контейнер для кнопок */
+        .buttons-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Расстояние между кнопками */
+        }
+
+        /* Общие стили для кнопок */
+        .btn {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        /* Кнопка ДА */
+        .btn-yes {
+            background-color: #4CAF50; /* Зеленый цвет */
+            color: white;
+            animation: pulse 1.5s infinite; /* Эффект пульсации */
+        }
+
+        .btn-yes:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        /* Кнопка НЕТ (убегающая) */
+        .btn-no {
+            background-color: #f44336; /* Красный цвет */
+            color: white;
+            position: relative; /* Чтобы плавно двигалась при изменении координат через JS */
+            transition: all 0.1s ease;
+            z-index: 999;
+        }
+
+        /* Анимация пульсации для кнопки "Да" */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        /* Адаптивность для маленьких экранов телефонов */
+        @media (max-width: 480px) {
+            .card-text {
+                font-size: 18px;
+                width: 60%;
+            }
+            .page-content {
+                max-width: 85%;
+            }
+            .btn {
+                font-size: 14px;
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Центральный блок открытки -->
+    <div class="page-content">
+        <!-- Само изображение открытки -->
+        <img src="C:\Users\Adik41\Desktop\adokpr\otkr.png" class="central-image" alt="Открытка">
+        
+        <!-- Текст и кнопки поверх картинки -->
+        <div class="card-text">
+            <div>Приглашаю самую милую ухтишку на свидание! Чтобы провести время вместе, поговорить обо всем на свете и просто порадовать тебя.</div>
+            
+            <!-- Блок с кнопками -->
+            <div class="buttons-container">
+                <button class="btn btn-yes" onclick="sayYes()">Да!</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">Нет</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Действие при нажатии на "Да"
+        function sayYes() {
+            alert("Ура! Можем выбрать дату, или можем сходить в четверг");
+            // Здесь при желании можно сделать переход на другую страницу:
+            // window.location.href = "success.html";
+        }
+
+        // Функция, которая заставляет кнопку "Нет" убегать
+        function moveNoButton() {
+            const noBtn = document.getElementById('noBtn');
+            
+            // Вычисляем случайные координаты в пределах окна браузера
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
+            
+            // Делаем позиционирование фиксированным, чтобы кнопка летала по всему экрану
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        // Логика падающих цветов
+        const images = [
+            "C:/Users/Adik41/Desktop/adokpr/icons1.png",
+            'C:/Users/Adik41/Desktop/adokpr/icons2.png',
+            'C:/Users/Adik41/Desktop/adokpr/icons3.png',
+            'C:/Users/Adik41/Desktop/adokpr/icons4.png'
+        ];
+
+        function createFallingImage() {
+            const img = document.createElement('img');
+            img.src = images[Math.floor(Math.random() * images.length)];
+            img.classList.add('falling-image');
+            img.style.left = Math.random() * window.innerWidth + 'px';
+            img.style.animationDuration = Math.random() * 3 + 2 + 's';
+            img.style.opacity = Math.random() * 0.5 + 0.5;
+
+            document.body.appendChild(img);
+
+            img.addEventListener('animationend', () => {
+                img.remove();
+            });
+        }
+
+        setInterval(createFallingImage, 600);
+    </script> 
+</body>
+</html>

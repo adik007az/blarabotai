@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОТКРЫТКА ОТ АДИКА</title>
+    <style>
+        body {
+            overflow: hidden;
+            background-color: #e071a5;
+            position: relative;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Анимация падающих цветов */
+        .falling-image {
+            position: absolute;
+            width: 50px;
+            animation: fall linear infinite;
+            z-index: 0; /* Под кнопкой */
+        }
+
+        @keyframes fall {
+            0% { top: -100px; transform: rotate(0deg); }
+            100% { top: 100vh; transform: rotate(360deg); }
+        }
+
+        /* Контейнер открытки в центре */
+        .card {
+            position: relative;
+            z-index: 10; /* Поверх всего */
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px); /* Эффект стекла */
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Стиль кнопки */
+        .next-btn {
+            background-color: white;
+            color: #e071a5;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .next-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .next-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Самый прекрасной ухтишке</h1>
+        <button class="next-btn" onclick="nextPage()">Открыть</button>
+    </div>
+
+    <script>
+        // Функция для перехода (замени page2.html на название своего второго файла)
+        function nextPage() {
+            window.location.href = "index1.html"; 
+        }
+
+        const images = [
+            "C:/Users/Adik41/Desktop/adokpr/icons1.png",
+            'C:/Users/Adik41/Desktop/adokpr/icons2.png',
+            'C:/Users/Adik41/Desktop/adokpr/icons3.png',
+            'C:/Users/Adik41/Desktop/adokpr/icons4.png'
+        ];
+
+        function createFallingImage() {
+            const img = document.createElement('img');
+            img.src = images[Math.floor(Math.random() * images.length)];
+            img.classList.add('falling-image');
+            img.style.left = Math.random() * window.innerWidth + 'px';
+            img.style.animationDuration = Math.random() * 3 + 2 + 's';
+            img.style.opacity = Math.random(); // Разная прозрачность для глубины
+
+            document.body.appendChild(img);
+
+            img.addEventListener('animationend', () => {
+                img.remove();
+            });
+        }
+
+        setInterval(createFallingImage, 600);
+    </script> 
+</body>
+</html>
